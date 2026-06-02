@@ -330,16 +330,36 @@ if (contactForm) {
     e.preventDefault();
 
     const btn = document.getElementById('form-submit');
+    const originalBtnHTML = btn.innerHTML;
+    
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-    setTimeout(() => {
+    const formData = new FormData(contactForm);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch("https://formsubmit.co/ajax/hamdyhaggag74@gmail.com", {
+      method: "POST",
+      headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
       contactForm.reset();
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-      btn.disabled  = false;
+      btn.innerHTML = originalBtnHTML;
+      btn.disabled = false;
       formSuccess.classList.add('show');
       setTimeout(() => formSuccess.classList.remove('show'), 5000);
-    }, 1600);
+    })
+    .catch(error => {
+      console.error(error);
+      btn.innerHTML = originalBtnHTML;
+      btn.disabled = false;
+      alert("Error sending message. Please try again or use direct email.");
+    });
   });
 }
 

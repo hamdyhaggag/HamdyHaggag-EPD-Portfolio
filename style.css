@@ -946,6 +946,8 @@ html[dir="rtl"] .ja-main-title i {
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; text-align: center; }
   .counter-strip { grid-template-columns: repeat(2,1fr); }
+  .phase-switcher { flex-direction: column; gap: 16px; }
+  .phase-divider { display: none; }
 }
 @media (max-width: 500px) {
   .hero-btns { flex-direction: column; align-items: center; }

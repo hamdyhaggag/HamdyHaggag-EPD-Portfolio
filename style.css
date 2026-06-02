@@ -747,7 +747,7 @@ html[dir="rtl"] .ja-main-title i {
   border-radius: var(--radius);
   backdrop-filter: blur(12px);
   display: flex; flex-direction: column; gap: 12px;
-  transition: all var(--transition);
+  transition: transform var(--transition), border-color var(--transition);
   text-align: center;
 }
 .ja-card:hover { transform: translateY(-4px); border-color: rgba(255,140,66,0.4); }

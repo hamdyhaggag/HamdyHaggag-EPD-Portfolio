@@ -41,7 +41,7 @@
 
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 body {
   font-family: var(--font-en);
   background: var(--bg);
@@ -396,8 +396,8 @@ body:hover .cursor { opacity: 1; }
 @media (max-width: 992px) {
   .hero-content { 
     padding-top: 52vh;
-    padding-left: 32px;
-    padding-right: 32px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   .hero-content-left { 
     max-width: 100%;
@@ -416,6 +416,15 @@ body:hover .cursor { opacity: 1; }
     -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   }
+  .hero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 16px 12px;
+    width: 100%;
+    gap: 12px;
+  }
+  .hero-stat { padding: 0 10px; }
+  .hero-stat-divider { display: none; }
 }
 .hero-stat { text-align: center; padding: 0 30px; }
 .hero-stat .stat-num {

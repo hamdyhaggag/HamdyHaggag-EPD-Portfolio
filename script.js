@@ -216,28 +216,8 @@ function initSwiper(selector) {
 }
 
 const swiperElec = initSwiper('.projects-swiper-electrical');
-const swiperSoft = initSwiper('.projects-swiper-software');
 
-/* Phase Switcher Logic */
-const btnElec = document.getElementById('btn-electrical');
-const btnSoft = document.getElementById('btn-software');
-const phaseElec = document.getElementById('phase-electrical');
-const phaseSoft = document.getElementById('phase-software');
 
-if (btnElec && btnSoft) {
-  btnElec.addEventListener('click', () => {
-    btnElec.classList.add('active');
-    btnSoft.classList.remove('active');
-    phaseElec.classList.add('active');
-    phaseSoft.classList.remove('active');
-  });
-  btnSoft.addEventListener('click', () => {
-    btnSoft.classList.add('active');
-    btnElec.classList.remove('active');
-    phaseSoft.classList.add('active');
-    phaseElec.classList.remove('active');
-  });
-}
 
 /* ── 10. ANIMATED COUNTERS ──────────────────── */
 function animateCounter(el) {

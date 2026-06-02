@@ -441,4 +441,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 })();
 
 console.log('%c⚡ Hamdy Haggag Portfolio', 'color:#FF8C42;font-size:20px;font-weight:900;');
-console.log('%cElectrical Power Distribution Engineer', 'color:#FFC857;font-size:12px;');
+console.log('%cElectrical Power & Distribution Engineer', 'color:#FFC857;font-size:12px;');

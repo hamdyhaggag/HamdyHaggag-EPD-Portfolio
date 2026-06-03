@@ -499,19 +499,37 @@ window.openProject = function(id) {
     type: 'نوع المشروع', desc: 'وصف المشروع', role: 'دوري', challenge: 'التحدي', tools: 'الأدوات', results: 'النتائج', view: 'عرض المخرجات'
   };
 
-  if (!modalBody) return;
   modalBody.innerHTML = `
     <h2>${p.title}</h2>
-    <span class="modal-type"><i class="fas fa-tag"></i> ${p.type}</span>
+    <span class="modal-type"><i class="fas fa-bolt"></i> ${p.type}</span>
     <div class="modal-grid">
-      <div class="modal-left">
-        <div class="modal-section"><h4>${labels.desc}</h4><p>${p.desc}</p></div>
-        <div class="modal-section"><h4>${labels.role}</h4><p>${p.role}</p></div>
-        <div class="modal-section"><h4>${labels.challenge}</h4><p>${p.challenge}</p></div>
+      <div class="modal-main">
+        <div class="modal-section">
+          <h4><i class="fas fa-align-left"></i> ${labels.desc}</h4>
+          <p>${p.desc}</p>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-user-tag"></i> ${labels.role}</h4>
+          <p>${p.role}</p>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-exclamation-triangle"></i> ${labels.challenge}</h4>
+          <p>${p.challenge}</p>
+        </div>
       </div>
-      <div class="modal-right">
-        <div class="modal-section"><h4>${labels.tools}</h4><div class="modal-tags-list">${p.tools.map(t => `<span class="modal-tag">${t}</span>`).join('')}</div></div>
-        <div class="modal-section"><h4>${labels.results}</h4><ul>${p.results.map(r => `<li><i class="fas fa-check"></i> ${r}</li>`).join('')}</ul></div>
+      <div class="modal-side">
+        <div class="modal-section">
+          <h4><i class="fas fa-tools"></i> ${labels.tools}</h4>
+          <div class="modal-tags-list">
+            ${p.tools.map(t => `<span class="modal-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div class="modal-section">
+          <h4><i class="fas fa-trophy"></i> ${labels.results}</h4>
+          <ul>
+            ${p.results.map(r => `<li><i class="fas fa-check-circle"></i> ${r}</li>`).join('')}
+          </ul>
+        </div>
       </div>
     </div>
   `;

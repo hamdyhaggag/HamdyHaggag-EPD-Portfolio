@@ -37,6 +37,9 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -717,12 +720,17 @@
               <textarea id="contact-message" name="message" rows="5" placeholder="حدثني عن مشروعك أو فرصة العمل..."
                 required></textarea>
             </div>
+
+
+
             <button type="submit" class="btn btn-primary btn-full" id="form-submit">
               <i class="fas fa-paper-plane"></i> إبعت الرسالة
             </button>
             <div class="form-success" id="form-success">
-              <i class="fas fa-check-circle"></i> وصلت! هرد عليك في أسرع وقت.
+              <i class="fas fa-check-circle"></i>
+              <span>وصلت بنجاح! هرد عليك في أسرع وقت.</span>
             </div>
+
           </form>
         </div>
       </div>

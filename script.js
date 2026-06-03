@@ -152,279 +152,94 @@ if (cursor && cursorFollower) {
     camera.position.y += (-mouseY * 4 - camera.position.y) * 0.03;
     camera.lookAt(scene.position);
 
-    ring.scale.setScalar(1 + Math.sin(t * 2) * 0.08);
-    ring.material.opacity = 0.12 + Math.sin(t * 3) * 0.08;
-
     nodes.forEach(n => {
       n.mesh.position.x += n.vx;
       n.mesh.position.y += n.vy;
       if (Math.abs(n.mesh.position.x) > 40) n.vx *= -1;
       if (Math.abs(n.mesh.position.y) > 30) n.vy *= -1;
-      n.mesh.material.opacity = 0.15 + Math.abs(Math.sin(t + n.mesh.position.x)) * 0.35;
     });
+
+    const s = 1 + Math.sin(t * 2.5) * 0.15;
+    ring.scale.set(s, s, s);
+    ring.material.opacity = 0.2 + Math.cos(t * 4) * 0.05;
 
     renderer.render(scene, camera);
   }
   animate();
 
   window.addEventListener('resize', () => {
-    const w = canvas.offsetWidth, h = canvas.offsetHeight;
-    camera.aspect = w / h;
+    camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
   });
 })();
 
-/* ── 8. PARTICLES.JS ─────────────────────────── */
-(function initParticles() {
-  if (typeof particlesJS === 'undefined') return;
-  particlesJS('particles-js', {
-    particles: {
-      number: { value: 35, density: { enable: true, value_area: 900 } },
-      color: { value: '#FF8C42' },
-      shape: { type: 'circle' },
-      opacity: { value: 0.25, random: true, anim: { enable: true, speed: 0.8, opacity_min: 0.05 } },
-      size: { value: 2.5, random: true },
-      line_linked: { enable: true, distance: 160, color: '#FF8C42', opacity: 0.08, width: 1 },
-      move: { enable: true, speed: 1.2, direction: 'none', random: true, out_mode: 'out' }
-    },
-    interactivity: {
-      detect_on: 'canvas',
-      events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } },
-      modes: { grab: { distance: 150, line_linked: { opacity: 0.25 } }, push: { particles_nb: 2 } }
-    },
-    retina_detect: true
-  });
-})();
-
-/* ── 9. SWIPER.JS PROJECTS ──────────────────── */
-function initSwiper(selector) {
-  return new Swiper(selector, {
-    slidesPerView: 1,
-    spaceBetween: 28,
-    grabCursor: true,
-    loop: true,
-    autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
-    pagination: { el: '.swiper-pagination', clickable: true },
-    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-    breakpoints: {
-      600:  { slidesPerView: 1.4, spaceBetween: 24 },
-      900:  { slidesPerView: 2,   spaceBetween: 28 },
-      1200: { slidesPerView: 2.5, spaceBetween: 32 }
-    }
-  });
+/* ── 8. EMAILJS & CONTACT FORM ──────────────── */
+// Initialize EmailJS with your Public Key
+// REPLACE THIS with your actual Public Key from EmailJS
+if (typeof emailjs !== 'undefined') {
+  emailjs.init("3P6TZFbV-gFEMFYme");
 }
 
-const swiperElec = initSwiper('.projects-swiper-electrical');
 
-
-
-/* ── 10. ANIMATED COUNTERS ──────────────────── */
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1800;
-  const step     = 16;
-  const inc      = target / (duration / step);
-  let current    = 0;
-
-  const timer = setInterval(() => {
-    current += inc;
-    if (current >= target) { current = target; clearInterval(timer); }
-    el.textContent = Math.floor(current);
-  }, step);
-}
-
-const counterObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      animateCounter(entry.target);
-      counterObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.6 });
-
-document.querySelectorAll('.stat-num, .counter-num').forEach(el => counterObserver.observe(el));
-
-/* ── 11. SKILL BAR ANIMATION ────────────────── */
-const barObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const bar = entry.target;
-      bar.style.width = bar.dataset.width + '%';
-      barObserver.unobserve(bar);
-    }
-  });
-}, { threshold: 0.3 });
-
-document.querySelectorAll('.sw-fill').forEach(bar => barObserver.observe(bar));
-
-/* ── 12. GSAP SCROLL ANIMATIONS ─────────────── */
-(function initGSAP() {
-  if (!window.gsap || !window.ScrollTrigger) return;
-  gsap.registerPlugin(ScrollTrigger);
-
-  /* Floating pulse on hero badge */
-  gsap.to('.hero-badge', {
-    y: -6, duration: 2.2,
-    ease: 'sine.inOut', yoyo: true, repeat: -1
-  });
-
-  /* Section titles stagger */
-  gsap.utils.toArray('.section-title').forEach(title => {
-    gsap.from(title, {
-      scrollTrigger: { trigger: title, start: 'top 88%' },
-      opacity: 0, y: 30, duration: 0.7, ease: 'power3.out'
-    });
-  });
-
-  /* Why cards stagger */
-  gsap.from('.why-card', {
-    scrollTrigger: { trigger: '.why-grid', start: 'top 80%' },
-    opacity: 0, y: 40, stagger: 0.12, duration: 0.6, ease: 'power2.out'
-  });
-
-  /* Cert cards stagger */
-  gsap.from('.cert-card', {
-    scrollTrigger: { trigger: '.cert-grid', start: 'top 82%' },
-    opacity: 0, scale: 0.95, stagger: 0.1, duration: 0.5, ease: 'back.out(1.5)'
-  });
-
-  /* Journey advantage cards */
-  gsap.from('.ja-card', {
-    scrollTrigger: { trigger: '.ja-cards', start: 'top 82%' },
-    opacity: 0, x: -20, stagger: 0.12, duration: 0.55, ease: 'power2.out'
-  });
-
-  /* Hero title dramatic reveal */
-  gsap.from('.hero-title', {
-    opacity: 0, y: 60, duration: 1.1, ease: 'power4.out', delay: 0.4
-  });
-})();
-
-/* ── 13. CONTACT FORM ───────────────────────── */
 const contactForm = document.getElementById('contact-form');
 const formSuccess = document.getElementById('form-success');
 
 if (contactForm) {
-  contactForm.addEventListener('submit', e => {
+  contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const btn = document.getElementById('form-submit');
-    const originalBtnHTML = btn.innerHTML;
+    const submitBtn = document.getElementById('form-submit');
+    const originalBtnHTML = submitBtn.innerHTML;
     
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData.entries());
+    // REPLACE "YOUR_SERVICE_ID" and "YOUR_TEMPLATE_ID" with your actual IDs
+    emailjs.sendForm('service_2zz4lv7', 'template_6mroe3m', this)
 
-    fetch("https://formsubmit.co/ajax/hamdyhaggag74@gmail.com", {
-      method: "POST",
-      headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(data => {
-      if (data.success === "false") {
-        throw new Error(data.message || "Submission failed");
-      }
-      contactForm.reset();
-      btn.innerHTML = originalBtnHTML;
-      btn.disabled = false;
-      formSuccess.classList.add('show');
-      setTimeout(() => formSuccess.classList.remove('show'), 5000);
-    })
-    .catch(error => {
-      console.error(error);
-      btn.innerHTML = originalBtnHTML;
-      btn.disabled = false;
-      alert("عذراً، حدث خطأ أثناء إرسال الرسالة. " + (error.message || "يرجى المحاولة لاحقاً أو مراسلتي مباشرة عبر البريد الإلكتروني."));
-    });
+
+      .then(() => {
+        submitBtn.innerHTML = originalBtnHTML;
+        submitBtn.disabled = false;
+        formSuccess.classList.add('show');
+        contactForm.reset();
+        setTimeout(() => formSuccess.classList.remove('show'), 6000);
+      }, (error) => {
+        submitBtn.innerHTML = originalBtnHTML;
+        submitBtn.disabled = false;
+        alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
+        console.error('EmailJS Error:', error);
+      });
   });
 }
 
-/* ── 14. CV DOWNLOAD PLACEHOLDER ────────────── */
-document.getElementById('download-cv')?.addEventListener('click', e => {
-  e.preventDefault();
-  alert('📄 CV will be available for download soon. Please contact me via email or WhatsApp for now!');
-});
+/* ── 9. PHASE SWITCHER (PROJECTS) ───────────── */
+const phaseBtns = document.querySelectorAll('.phase-btn');
+const phases    = document.querySelectorAll('.projects-phase');
 
-/* ── 15. ACTIVE NAV LINK ON SCROLL ─────────── */
-const sections  = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-link[href^="#"]');
-
-const sectionObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(l => l.classList.remove('active'));
-      const matching = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
-      if (matching) matching.classList.add('active');
-    }
-  });
-}, { rootMargin: '-40% 0px -55% 0px' });
-
-sections.forEach(s => sectionObserver.observe(s));
-
-/* Active nav link style */
-const navStyle = document.createElement('style');
-navStyle.textContent = `.nav-link.active { color: var(--orange); background: rgba(255,140,66,0.08); }`;
-document.head.appendChild(navStyle);
-
-/* ── 16. SMOOTH ANCHOR SCROLL ───────────────── */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    const href = this.getAttribute('href');
-    if (href === '#') return;
-    const target = document.querySelector(href);
-    if (!target) return;
-    e.preventDefault();
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+phaseBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-phase');
+    phaseBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    phases.forEach(p => {
+      p.classList.remove('active');
+      if (p.id === target) p.classList.add('active');
+    });
   });
 });
 
-/* ── 17. FLOATING ELECTRICAL PULSE (canvas) ── */
-(function floatingPulse() {
-  const canvas = document.createElement('canvas');
-  canvas.id    = 'pulse-canvas';
-  Object.assign(canvas.style, {
-    position: 'fixed', bottom: '0', left: '0', width: '100%', height: '100px',
-    pointerEvents: 'none', zIndex: '1', opacity: '0.35'
-  });
-  document.body.appendChild(canvas);
-
-  const ctx = canvas.getContext('2d');
-  let w, h;
-
-  function resize() {
-    w = canvas.width  = window.innerWidth;
-    h = canvas.height = 100;
+/* ── 10. SWIPER INSTANCES ─────────────────────── */
+new Swiper('.projects-swiper', {
+  slidesPerView: 1,
+  spaceBetween: 24,
+  loop: true,
+  autoplay: { delay: 4000, disableOnInteraction: false },
+  pagination: { el: '.swiper-pagination', clickable: true },
+  navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+  breakpoints: {
+    768: { slidesPerView: 2 },
+    1100: { slidesPerView: 3 }
   }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let phase = 0;
-  function drawPulse() {
-    ctx.clearRect(0, 0, w, h);
-    const theme = document.documentElement.getAttribute('data-theme');
-    ctx.strokeStyle = theme === 'dark' ? 'rgba(255,140,66,0.5)' : 'rgba(255,140,66,0.35)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    for (let x = 0; x <= w; x++) {
-      const y = h * 0.5 + Math.sin((x / w) * Math.PI * 6 + phase) * 18 + Math.sin((x / w) * Math.PI * 12 + phase * 1.5) * 7;
-      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    phase += 0.04;
-    requestAnimationFrame(drawPulse);
-  }
-  drawPulse();
-})();
-
-console.log('%c⚡ Hamdy Haggag Portfolio', 'color:#FF8C42;font-size:20px;font-weight:900;');
-console.log('%cElectrical Power & Distribution Engineer', 'color:#FFC857;font-size:12px;');
+});

@@ -326,8 +326,14 @@ if (contactForm) {
       },
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
     .then(data => {
+      if (data.success === "false") {
+        throw new Error(data.message || "Submission failed");
+      }
       contactForm.reset();
       btn.innerHTML = originalBtnHTML;
       btn.disabled = false;
@@ -338,7 +344,7 @@ if (contactForm) {
       console.error(error);
       btn.innerHTML = originalBtnHTML;
       btn.disabled = false;
-      alert("Error sending message. Please try again or use direct email.");
+      alert("عذراً، حدث خطأ أثناء إرسال الرسالة. " + (error.message || "يرجى المحاولة لاحقاً أو مراسلتي مباشرة عبر البريد الإلكتروني."));
     });
   });
 }

@@ -191,12 +191,30 @@ if (contactForm) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
+    // Get form data and convert to JSON
+    const formData = new FormData(this);
+    const data = {};
+    formData.forEach((value, key) => { data[key] = value });
+
+    // Add timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
     // FormSubmit.co AJAX version
     fetch("https://formsubmit.co/ajax/hamdyhaggag74@gmail.com", {
       method: "POST",
-      body: new FormData(this)
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: controller.signal
     })
-    .then(response => response.json())
+    .then(response => {
+      clearTimeout(timeoutId);
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
     .then(data => {
       submitBtn.innerHTML = originalBtnHTML;
       submitBtn.disabled = false;
@@ -205,15 +223,23 @@ if (contactForm) {
         contactForm.reset();
         setTimeout(() => formSuccess.classList.remove('show'), 6000);
       } else {
-        alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
+        // Provide more details if available
+        const errorMsg = data.message || 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.';
+        alert(errorMsg);
       }
     })
     .catch(error => {
       submitBtn.innerHTML = originalBtnHTML;
       submitBtn.disabled = false;
-      alert('حدث خطأ في الاتصال. يرجى المحاولة لاحقاً.');
+      
+      if (error.name === 'AbortError') {
+        alert('انتهت مهلة الاتصال. يرجى التأكد من جودة الإنترنت والمحاولة مرة أخرى.');
+      } else {
+        alert('حدث خطأ في الاتصال. يرجى التأكد من اتصالك بالإنترنت والمحاولة مجدداً.');
+      }
       console.error('FormSubmit Error:', error);
     });
+
 
   });
 }

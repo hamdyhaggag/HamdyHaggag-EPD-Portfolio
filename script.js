@@ -174,12 +174,8 @@ if (cursor && cursorFollower) {
   });
 })();
 
-/* ── 8. EMAILJS & CONTACT FORM ──────────────── */
-// Initialize EmailJS with your Public Key
-// REPLACE THIS with your actual Public Key from EmailJS
-if (typeof emailjs !== 'undefined') {
-  emailjs.init("3P6TZFbV-gFEMFYme");
-}
+// Form handling is now done via FormSubmit.co
+
 
 
 const contactForm = document.getElementById('contact-form');
@@ -195,22 +191,30 @@ if (contactForm) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-    // REPLACE "YOUR_SERVICE_ID" and "YOUR_TEMPLATE_ID" with your actual IDs
-    emailjs.sendForm('service_2zz4lv7', 'template_6mroe3m', this)
-
-
-      .then(() => {
-        submitBtn.innerHTML = originalBtnHTML;
-        submitBtn.disabled = false;
+    // FormSubmit.co AJAX version
+    fetch("https://formsubmit.co/ajax/hamdyhaggag74@gmail.com", {
+      method: "POST",
+      body: new FormData(this)
+    })
+    .then(response => response.json())
+    .then(data => {
+      submitBtn.innerHTML = originalBtnHTML;
+      submitBtn.disabled = false;
+      if (data.success === "true" || data.success === true) {
         formSuccess.classList.add('show');
         contactForm.reset();
         setTimeout(() => formSuccess.classList.remove('show'), 6000);
-      }, (error) => {
-        submitBtn.innerHTML = originalBtnHTML;
-        submitBtn.disabled = false;
+      } else {
         alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
-        console.error('EmailJS Error:', error);
-      });
+      }
+    })
+    .catch(error => {
+      submitBtn.innerHTML = originalBtnHTML;
+      submitBtn.disabled = false;
+      alert('حدث خطأ في الاتصال. يرجى المحاولة لاحقاً.');
+      console.error('FormSubmit Error:', error);
+    });
+
   });
 }
 

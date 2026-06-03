@@ -244,24 +244,287 @@ if (contactForm) {
   });
 }
 
-/* ── 9. PHASE SWITCHER (PROJECTS) ───────────── */
-const phaseBtns = document.querySelectorAll('.phase-btn');
-const phases    = document.querySelectorAll('.projects-phase');
+/* ── 9. PROJECTS DATA & MODAL ─────────────────── */
+const isEn = document.documentElement.lang === 'en';
 
-phaseBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.getAttribute('data-phase');
-    phaseBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    phases.forEach(p => {
-      p.classList.remove('active');
-      if (p.id === target) p.classList.add('active');
-    });
-  });
-});
+const projectsData = {
+  ar: [
+    {
+      id: 'p1',
+      title: 'تصميم شبكة توزيع LV',
+      type: 'مشروع بنية تحتية - تجاري سكني',
+      tag: 'توزيع الجهد المنخفض (LV)',
+      desc: 'تصميم كامل لشبكة توزيع جهد منخفض لمجمع مختلط يشمل حسابات الأحمال المعقدة وتوزيعها لضمان استقرار الشبكة.',
+      role: 'مهندس توزيع كهرباء - مسؤول عن الحسابات والمخططات وتنسيق المسارات وتصميم اللوحات العمومية والفرعية.',
+      challenge: 'موازنة الأحمال بين الفازات المختلفة مع مراعاة هبوط الجهد (Voltage Drop) في أبعد نقطة بالمجمع لضمان كفاءة وصول التيار.',
+      tools: ['ETAP', 'AutoCAD Electrical', 'Excel', 'IEC 60364'],
+      results: [
+        'توفير 15% من استهلاك الكابلات بفضل التحسين الدقيق للمسارات.',
+        'تحقيق كفاءة عالية في توزيع الأحمال بنسبة عدم توازن (Unbalance) أقل من 3%.',
+        'ضمان مطابقة النظام بنسبة 100% لمعايير السلامة العالمية.'
+      ],
+      icon: 'fas fa-network-wired',
+      colorClass: 'orange'
+    },
+    {
+      id: 'p2',
+      title: 'تصميم مبنى تجاري كهربائي',
+      type: 'مشروع تجاري (مول / مجمع إداري)',
+      tag: 'التصميم الداخلي الكامل',
+      desc: 'إعداد المخططات الكهربائية والإنارة وتوزيع المآخذ وجداول اللوحات لمبنى إداري وتجاري متكامل مع نظام تيار خفيف.',
+      role: 'مصمم أنظمة كهرباء - إعداد تقارير الإنارة وحصر الكميات (BOQ) وتصميم أنظمة الحماية والتنسيق مع التكييف.',
+      challenge: 'توزيع الإنارة لتحقيق شدة الإضاءة المطلوبة مع تقليل الـ Glare وتفتيت أحمال التكييف والخدمات لتقليل الحمل الإجمالي.',
+      tools: ['AutoCAD', 'DIALux EVO', 'Load Schedules', 'Revit'],
+      results: [
+        'تصميم نظام إنارة موفر للطاقة باستخدام تقنيات LED وحساسات الحركة.',
+        'تقليل تكلفة المهمات الكهربائية بنسبة 10% بفضل التوزيع الذكي للأحمال.',
+        'إكمال المشروع قبل الموعد بـ 10 أيام.'
+      ],
+      icon: 'fas fa-building',
+      colorClass: 'amber'
+    },
+    {
+      id: 'p3',
+      title: 'تصميم نظام إنارة الشوارع',
+      type: 'مشروع بنية تحتية - طرق',
+      tag: 'إنارة خارجية دقيقة',
+      desc: 'تصميم نظام إنارة شوارع موفر للطاقة يعتمد على تقنيات LED الحديثة مع حسابات الـ Photometry لضمان وضوح الرؤية.',
+      role: 'مهندس إنارة - مسؤول عن توزيع القطب الكهربائي وحسابات شدة الإضاءة وتوزي القواعد الأرضية.',
+      challenge: 'تحقيق توحيد الإضاءة (Uniformity) على طول الطريق مع تقليل التكلفة الإجمالية للأعمدة والكابلات المغذية.',
+      tools: ['DIALux', 'Relux', 'AutoCAD'],
+      results: [
+        'تحقيق معايير السلامة المرورية العالمية لشدة الإضاءة المطلوبة.',
+        'تقليل الفاقد الكهربائي بنسبة 12% باستخدام كوابل ذات بصمة كربونية منخفضة.',
+        'استخدام تقنيات التحكم الذكي (Dimming) في الساعات المتأخرة لتوفير الطاقة.'
+      ],
+      icon: 'fas fa-road',
+      colorClass: 'green'
+    },
+    {
+      id: 'p4',
+      title: 'أتمتة حسابات الأحمال بـ Python',
+      type: 'ابتكار تقني - أتمتة',
+      tag: 'برمجة هندسية',
+      desc: 'تطوير كود بلغة بايثون يقوم بقراءة البيانات من ملفات الـ Excel وتحويلها تلقائياً إلى جداول أحمال (Panel Schedules) جاهزة.',
+      role: 'مطور أدوات هندسية - تصميم المنطق البرمجي وربطه بقواعد البيانات الهندسية.',
+      challenge: 'التعامل مع التغييرات المكررة في التصميم وتوفير وقت المهندس في إعادة كتابة البيانات يدوياً.',
+      tools: ['Python', 'Pandas', 'Openpyxl', 'Tkinter'],
+      results: [
+        'تقليل وقت إنشاء جداول الأحمال بنسبة 70%.',
+        'ضمان دقة الحسابات بنسبة 100% ومنع الخطأ البشري في النقل اليدوي.',
+        'إمكانية تعديل الجداول وتحديثها فورياً عند تغيير قيمة أي حمل.'
+      ],
+      icon: 'fas fa-rocket',
+      colorClass: 'blue'
+    },
+    {
+      id: 'p5',
+      title: 'تصميم نظام طاقة شمسية (PV)',
+      type: 'طاقة متجددة - مشروع سكني',
+      tag: 'أنظمة الطاقة المتجددة',
+      desc: 'تصميم منظومة خلايا شمسية فوق أسطح مبنى إداري لتقليل الاعتماد على الشبكة العمومية وتوفير الطاقة.',
+      role: 'مصمم أنظمة شمسية - دراسة الإشعاع الشمسي، اختيار الألواح والـ Inverters، وحسابات العائد الاقتصادي.',
+      challenge: 'تحليل ظلال الأشجار والمباني المجاورة لضمان أقصى كفاءة للألواح على مدار العام.',
+      tools: ['PVsyst', 'AutoCAD', 'SMA Design', 'PVSOL'],
+      results: [
+        'تغطية 40% من استهلاك الكهرباء السنوي للمبنى.',
+        'استرداد تكلفة النظام (Payback Period) في أقل من 5 سنوات.',
+        'تقليل الانبعاثات الكربونية بمقدار 12 طن سنوياً.'
+      ],
+      icon: 'fas fa-solar-panel',
+      colorClass: 'green'
+    },
+    {
+      id: 'p6',
+      title: 'توزيع كهرباء مركز طبي متخصص',
+      type: 'مشروع طبي - رعاية صحية',
+      tag: 'أنظمة حرجة (IPS/UPS)',
+      desc: 'تصميم الأنظمة الكهربائية لعيادات ومركز أشعة مع التركيز على استمرارية الخدمة (Continuity of Supply).',
+      role: 'مهندس تصميم كهربائي - توزيع الأحمال الحرجة، أنظمة ה- UPS، والمولدات الاحتياطية.',
+      challenge: 'الالتزام بمعايير الـ IEC 60364-7-710 الخاصة بالمنشآت الطبية لضمان سلامة المرضى من التيارات المتسربة.',
+      tools: ['ETAP', 'Revit', 'Dialux EVO', 'IEC Standards'],
+      results: [
+        'تصميم نظام تأريض معزول (IPS) لغرف العمليات بمستوى أمان 100%.',
+        'ضمان انتقال الطاقة للمولد خلال أقل من 10 ثواني عند انقطاع الشبكة.',
+        'تنسيق كامل للمسارات لخدمات الغازات الطبية والتكييف.'
+      ],
+      icon: 'fas fa-hospital',
+      colorClass: 'turquoise'
+    }
+  ],
+  en: [
+    {
+      id: 'p1',
+      title: 'LV Distribution Network Design',
+      type: 'Infrastructure - Commercial/Residential',
+      tag: 'Low Voltage (LV) Distribution',
+      desc: 'Complete design of an LV distribution network for a mixed-use complex including complex load calculations.',
+      role: 'Electrical Distribution Engineer - Responsible for calculations, plans, routing, and panel design.',
+      challenge: 'Balancing loads between phases and managing Voltage Drop at the farthest points of the complex.',
+      tools: ['ETAP', 'AutoCAD Electrical', 'Excel', 'IEC 60364'],
+      results: [
+        '15% reduction in cable consumption through optimized routing.',
+        'Achieved high load balance with less than 3% unbalance.',
+        '100% compliance with international safety standards.'
+      ],
+      icon: 'fas fa-network-wired',
+      colorClass: 'orange'
+    },
+    {
+      id: 'p2',
+      title: 'Commercial Building Electrical Design',
+      type: 'Commercial (Mall / Admin Complex)',
+      tag: 'Full Indoor Design',
+      desc: 'Preparation of electrical plans, lighting, socket distribution, and panel schedules for an integrated complex.',
+      role: 'Electrical Systems Designer - Lighting reports, BOQ, protection system design, and HVAC coordination.',
+      challenge: 'Achieving required LUX levels while minimizing glare and optimizing HVAC load distribution.',
+      tools: ['AutoCAD', 'DIALux EVO', 'Load Schedules', 'Revit'],
+      results: [
+        'Energy-efficient lighting design using LED and motion sensors.',
+        '10% reduction in electrical component costs through smart load distribution.',
+        'Completed project 10 days ahead of schedule.'
+      ],
+      icon: 'fas fa-building',
+      colorClass: 'amber'
+    },
+    {
+      id: 'p3',
+      title: 'Street Lighting System Design',
+      type: 'Infrastructure - Roads',
+      tag: 'Precision Outdoor Lighting',
+      desc: 'Design of an energy-efficient street lighting system using modern LED technology and Photometry analysis.',
+      role: 'Lighting Engineer - Responsible for pole placement, LUX calculations, and cable sizing.',
+      challenge: 'Achieving lighting Uniformity along the road while minimizing the number of poles and cable lengths.',
+      tools: ['DIALux', 'Relux', 'AutoCAD'],
+      results: [
+        'Met international traffic safety standards for lighting intensity.',
+        '12% reduction in electrical losses using low-carbon footprint cables.',
+        'Implemented smart dimming technologies for late-night energy saving.'
+      ],
+      icon: 'fas fa-road',
+      colorClass: 'green'
+    },
+    {
+      id: 'p4',
+      title: 'Load Calculation Automation (Python)',
+      type: 'Tech Innovation - Automation',
+      tag: 'Engineering Programming',
+      desc: 'Developed a Python-based tool to automatically read Excel data and generate ready-to-use Panel Schedules.',
+      role: 'Engineering Tool Developer - Designing the logic and integrating with engineering databases.',
+      challenge: 'Handling frequent design changes and saving engineering time by eliminating manual data entry.',
+      tools: ['Python', 'Pandas', 'Openpyxl', 'Tkinter'],
+      results: [
+        '70% reduction in panel schedule creation time.',
+        '100% mathematical accuracy, eliminating human transcription errors.',
+        'Instant updates to all schedules when any load value changes.'
+      ],
+      icon: 'fas fa-rocket',
+      colorClass: 'blue'
+    },
+    {
+      id: 'p5',
+      title: 'Solar PV System Design',
+      type: 'Renewable Energy - Residential',
+      tag: 'PV Systems',
+      desc: 'Design of a rooftop solar PV system for an administrative building to reduce grid dependency.',
+      role: 'Solar Systems Designer - Irradiation analysis, panel/inverter selection, and ROI calculation.',
+      challenge: 'Shading analysis from nearby obstacles ensuring maximum annual yield.',
+      tools: ['PVsyst', 'AutoCAD', 'SMA Design', 'PVSOL'],
+      results: [
+        'Covered 40% of the building\'s annual electricity consumption.',
+        'Achieved a system payback period of under 5 years.',
+        'Prevented 12 tons of CO2 emissions annually.'
+      ],
+      icon: 'fas fa-solar-panel',
+      colorClass: 'green'
+    },
+    {
+      id: 'p6',
+      title: 'Medical Center Power Distribution',
+      type: 'Medical Project - Healthcare',
+      tag: 'Critical Power (IPS/UPS)',
+      desc: 'Designing electrical systems for specialized clinics with focus on continuity of supply.',
+      role: 'Design Engineer - Critical load partitioning, UPS systems, and standby generators.',
+      challenge: 'Compliance with IEC 60364-7-710 for medical locations to ensure patient safety from leakage currents.',
+      tools: ['ETAP', 'Revit', 'Dialux EVO', 'IEC Standards'],
+      results: [
+        '100% safety rating for Operation Theater isolated power system (IPS).',
+        'Ensured generator transition time of less than 10 seconds.',
+        'Zero coordination clashes with medical gas and HVAC services.'
+      ],
+      icon: 'fas fa-hospital',
+      colorClass: 'turquoise'
+    }
+  ]
+};
+
+function renderProjects() {
+  const wrapper = document.querySelector('.projects-swiper-electrical .swiper-wrapper');
+  if (!wrapper) return;
+
+  const list = isEn ? projectsData.en : projectsData.ar;
+
+  wrapper.innerHTML = list.map(p => `
+    <div class="swiper-slide">
+      <div class="project-card glass-card">
+        <div class="pc-icon-wrap ${p.colorClass}"><i class="${p.icon}"></i></div>
+        <span class="pc-tag">${p.tag}</span>
+        <h3 class="pc-title">${p.title}</h3>
+        <p class="pc-desc">${p.desc.substring(0, 100)}...</p>
+        <div class="pc-tech">
+          ${p.tools.slice(0, 3).map(t => `<span>${t}</span>`).join('')}
+        </div>
+        <button class="btn btn-outline btn-full" style="margin-top:15px; padding: 10px;" onclick="openProject('${p.id}')">
+          <i class="fas fa-eye"></i> ${isEn ? 'View Details' : 'تفاصيل المشروع'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Global modal elements
+const projectModal = document.getElementById('project-modal');
+const modalBody = document.getElementById('modal-body');
+const modalClose = document.getElementById('modal-close');
+const modalOverlay = document.getElementById('modal-overlay');
+
+window.openProject = function(id) {
+  const list = isEn ? projectsData.en : projectsData.ar;
+  const p = list.find(item => item.id === id);
+  if (!p) return;
+
+  const labels = isEn ? {
+    type: 'Project Type', desc: 'Description', role: 'Role', challenge: 'Challenge', tools: 'Tools', results: 'Results', view: 'View Deliverables'
+  } : {
+    type: 'نوع المشروع', desc: 'وصف المشروع', role: 'دوري', challenge: 'التحدي', tools: 'الأدوات', results: 'النتائج', view: 'عرض المخرجات'
+  };
+
+  if (!modalBody) return;
+  modalBody.innerHTML = `
+    <h2>${p.title}</h2>
+    <span class="modal-type"><i class="fas fa-tag"></i> ${p.type}</span>
+    <div class="modal-grid">
+      <div class="modal-left">
+        <div class="modal-section"><h4>${labels.desc}</h4><p>${p.desc}</p></div>
+        <div class="modal-section"><h4>${labels.role}</h4><p>${p.role}</p></div>
+        <div class="modal-section"><h4>${labels.challenge}</h4><p>${p.challenge}</p></div>
+      </div>
+      <div class="modal-right">
+        <div class="modal-section"><h4>${labels.tools}</h4><div class="modal-tags-list">${p.tools.map(t => `<span class="modal-tag">${t}</span>`).join('')}</div></div>
+        <div class="modal-section"><h4>${labels.results}</h4><ul>${p.results.map(r => `<li><i class="fas fa-check"></i> ${r}</li>`).join('')}</ul></div>
+      </div>
+    </div>
+  `;
+  projectModal.classList.add('open');
+};
+
+if (modalClose) modalClose.addEventListener('click', () => projectModal.classList.remove('open'));
+if (modalOverlay) modalOverlay.addEventListener('click', () => projectModal.classList.remove('open'));
 
 /* ── 10. SWIPER INSTANCES ─────────────────────── */
-new Swiper('.projects-swiper', {
+renderProjects();
+
+new Swiper('.projects-swiper-electrical', {
   slidesPerView: 1,
   spaceBetween: 24,
   loop: true,
@@ -276,33 +539,25 @@ new Swiper('.projects-swiper', {
 
 /* ── 11. COUNTER ANIMATION ─────────────────────── */
 const counters = document.querySelectorAll('.counter-num, .stat-num');
-
 const startCounter = (el) => {
   const target = +el.getAttribute('data-target');
-  const duration = 2000; // 2 seconds
-  const increment = target / (duration / 16); // 60fps
   let current = 0;
-
   const update = () => {
-    current += increment;
+    current += target / 100;
     if (current < target) {
       el.innerText = Math.ceil(current);
       requestAnimationFrame(update);
-    } else {
-      el.innerText = target;
-    }
+    } else { el.innerText = target; }
   };
   update();
 };
-
-const counterObserver = new IntersectionObserver((entries, observer) => {
+const counterObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       startCounter(entry.target);
-      observer.unobserve(entry.target);
+      counterObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.2 });
-
-counters.forEach(counter => counterObserver.observe(counter));
+counters.forEach(c => counterObserver.observe(c));
 

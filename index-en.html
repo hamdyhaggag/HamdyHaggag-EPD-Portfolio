@@ -788,10 +788,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Project Detail Modal -->
+  <div class="project-modal" id="project-modal">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content glass-card">
+      <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+      <div class="modal-body" id="modal-body">
+        <!-- Content will be injected by JS -->
+      </div>
+    </div>
+  </div>
+
   <div class="form-success" id="form-success">
     <i class="fas fa-check-circle"></i>
     <span>Sent successfully! I'll get back to you soon.</span>
   </div>
+
   <script src="script.js"></script>
 </body>
 

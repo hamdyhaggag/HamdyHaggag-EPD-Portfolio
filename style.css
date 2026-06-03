@@ -637,6 +637,9 @@ html[dir="rtl"] .ja-main-title i {
   transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
 }
 
+/* ===== SERVICES ===== */
+.services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+
 /* ===== PROJECTS ===== */
 .projects { background: var(--bg2); }
 .projects-swiper { padding-bottom: 50px !important; }
@@ -747,25 +750,7 @@ html[dir="rtl"] .ja-main-title i {
 }
 @keyframes pulse { 0%,100%{box-shadow:0 6px 24px rgba(255,140,66,0.4)} 50%{box-shadow:0 6px 40px rgba(255,140,66,0.7)} }
 .ja-text { font-size: 0.72rem; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; }
-.ja-main-title {
-  font-size: 1.3rem; font-weight: 800; text-align: center;
-  margin-bottom: 28px; color: var(--text-primary);
-}
-.ja-main-title i { color: var(--amber); margin-right: 8px; }
-.ja-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-.ja-card {
-  padding: 22px;
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius);
-  backdrop-filter: blur(12px);
-  display: flex; flex-direction: column; gap: 12px;
-  transition: transform var(--transition), border-color var(--transition);
-  text-align: center;
-}
-.ja-card:hover { transform: translateY(-4px); border-color: rgba(255,140,66,0.4); }
-.ja-card i { font-size: 1.6rem; color: var(--orange); }
-.ja-card span { font-size: 0.85rem; color: var(--text-secondary); }
+
 
 /* ===== CERTIFICATIONS ===== */
 .certifications { background: var(--bg2); }
@@ -929,7 +914,7 @@ html[dir="rtl"] .ja-main-title i {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
   .skills-grid { grid-template-columns: repeat(2,1fr); }
-  .ja-cards { grid-template-columns: repeat(2,1fr); }
+
   .journey-grid { grid-template-columns: 1fr; }
   .journey-arrow { flex-direction: row; padding: 8px 0; }
   .ja-line { width: 40px; height: 2px; }
@@ -940,6 +925,7 @@ html[dir="rtl"] .ja-main-title i {
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .counter-strip { grid-template-columns: repeat(2,1fr); }
   .counter-item:nth-child(2) { border-right: none; }
+  .services-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .nav-menu {
@@ -969,7 +955,7 @@ html[dir="rtl"] .ja-main-title i {
   .hero-stat { padding: 0 10px; }
   .hero-stat .stat-num { font-size: 1.6rem; }
   .counter-strip { grid-template-columns: 1fr 1fr; }
-  .ja-cards { grid-template-columns: 1fr; }
+
 }
 
 /* ===== PRINT OPTIMIZATION ===== */

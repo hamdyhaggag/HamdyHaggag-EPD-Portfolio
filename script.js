@@ -273,3 +273,36 @@ new Swiper('.projects-swiper', {
     1100: { slidesPerView: 3 }
   }
 });
+
+/* ── 11. COUNTER ANIMATION ─────────────────────── */
+const counters = document.querySelectorAll('.counter-num, .stat-num');
+
+const startCounter = (el) => {
+  const target = +el.getAttribute('data-target');
+  const duration = 2000; // 2 seconds
+  const increment = target / (duration / 16); // 60fps
+  let current = 0;
+
+  const update = () => {
+    current += increment;
+    if (current < target) {
+      el.innerText = Math.ceil(current);
+      requestAnimationFrame(update);
+    } else {
+      el.innerText = target;
+    }
+  };
+  update();
+};
+
+const counterObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      startCounter(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+counters.forEach(counter => counterObserver.observe(counter));
+
